@@ -13,3 +13,6 @@ addopts = "--doctest-modules -vv --cov=pcse tests"
 testpaths = [
     "tests",
 ]
+
+[tool.pydocstyle]
+match = '(?!test_|state_machine).*\.py'
