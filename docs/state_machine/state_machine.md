@@ -1,5 +1,7 @@
 # State machine
 
+Source code: [state_machine.py](../../pcse/state_machine/state_machine.py)
+
 Base class for a state machine / workflow.
 
 ```python
