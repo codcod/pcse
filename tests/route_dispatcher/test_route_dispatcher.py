@@ -33,12 +33,21 @@ class TestDispatcher(unittest.TestCase):
     def test_dispatcher_regex(self):
         d = self.rd
         not_found = '404 Not Found'
-        self.assertEqual('time', d.call_route('GET', r'/time'))
-        self.assertEqual('echo', d.call_route('GET', r'/echo'))
-        self.assertEqual(not_found, d.call_route('POST', r'/echo'))
-        self.assertEqual(not_found, d.call_route('POST', r'/echo/2'))
-        self.assertEqual('echo', d.call_route('GET', r'/echo/2'))
+        self.assertEqual('time', d.call_route('get', r'/time'))
+        self.assertEqual('echo', d.call_route('get', r'/echo'))
+        self.assertEqual(not_found, d.call_route('post', r'/echo'))
+        self.assertEqual(not_found, d.call_route('post', r'/echo/2'))
+        self.assertEqual('echo', d.call_route('get', r'/echo/2'))
 
+    def test_dispatcher_regex_routes_order(self):
+        d = self.rd
+        not_found = '404 not found'
+
+        d.register('GET', r'/order', lambda: 'order')
+        d.register('GET', r'/order/(?P<id>\d+)', lambda: 'order/id')
+
+        self.assertEqual('order/id', d.call_route('get', r'/order/1'))
+        self.assertEqual('order', d.call_route('get', r'/order'))
 
 if __name__ == '__main__':
     unittest.main()
