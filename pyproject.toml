@@ -9,10 +9,10 @@ skip-string-normalization = 1
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/latest/reference/customize.html
 minversion = "6.0"
-addopts = "--doctest-modules -vv --cov=pcse tests"
+addopts = "--doctest-modules -vv --cov=pcse --cov-report=html tests"
 testpaths = [
     "tests",
 ]
 
 [tool.pydocstyle]
-match = '(?!test_|state_machine).*\.py'
+match = '(?!test_|state_machine|perf*).*\.py'
