@@ -15,4 +15,18 @@ testpaths = [
 ]
 
 [tool.pydocstyle]
-match = '(?!test_|state_machine|perf*).*\.py'
+match = '(?!test_|state_machine).*\.py'
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+scripts_are_modules = true
+implicit_reexport = true
+exclude = [
+    '^pcse/state_machine/.*\.py$',
+]
+
+
+# Reminder:
+# '^file1\.py$',   # TOML literal string (single-quotes, no escaping necessary)
+# "^file2\\.py$",  # TOML basic string (double-quotes, backslash and other characters need escaping)

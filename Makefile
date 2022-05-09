@@ -11,8 +11,7 @@ venv:
 	@printf "\nDone. You can now activate the virtual environment:\n  source .venv/bin/activate\n"
 
 mypy:
-	mypy --strict --scripts-are-modules --implicit-reexport pcse
-		#scripts/*
+	mypy $(src)  # configured vie pyproject.toml
 
 check:
 	@printf "\n-[ pylint ]-\n"

@@ -7,26 +7,35 @@ given set of arguments:
 - path: URL fragment like '/user/1', '/time'
 """
 
+import abc
 import re
-from typing import Callable
+import typing as tp
+
+Environ: tp.TypeAlias = dict[str, tp.Any]
+Headers: tp.TypeAlias = list[tuple[str, str]]
+StartResponse: tp.TypeAlias = tp.Callable[[str, Headers], None]
+HandlerReturns: tp.TypeAlias = str
+Handler: tp.TypeAlias = tp.Callable[[], HandlerReturns]
 
 
-class PathDispatcher:
+class PathDispatcher(abc.ABC):
     """Dispatch requests to a registered handler based on a given path and method.
 
     Base class indended for extension.
     """
 
-    def register(self, method: str, path: str, handler: Callable):
+    @abc.abstractmethod
+    def register(self, method: str, path: str, handler: Handler) -> Handler:
         """Register route with the path dispatcher."""
         raise NotImplementedError()
 
-    def route_notfound_404(self):
+    def route_notfound_404(self) -> HandlerReturns:
         """Handle route search misses."""
         print('Route not found')
         return '404 Not Found'
 
-    def call_route(self, method, path):
+    @abc.abstractmethod
+    def call_route(self, method: str, path: str) -> HandlerReturns:
         """Search route for a given set of parameters."""
         raise NotImplementedError()
 
@@ -37,16 +46,16 @@ class BasicPathDispatcher(PathDispatcher):
     Does not support paths with parameters.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init."""
-        self.routes = {}
+        self.routes: dict[tuple[str, str], Handler] = {}
 
-    def register(self, method: str, path: str, handler: Callable):
+    def register(self, method: str, path: str, handler: Handler) -> Handler:
         """Implement inherited method."""
         self.routes[method.upper(), path] = handler
         return handler
 
-    def call_route(self, method, path):
+    def call_route(self, method: str, path: str) -> HandlerReturns:
         """Implement inherited method."""
         handler = self.routes.get((method, path), self.route_notfound_404)
         return handler()
@@ -58,17 +67,17 @@ class RegexPathDispatcher(PathDispatcher):
     Much slower than `BasicPathDispatcher`.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Init."""
-        self.routes = []
+        self.routes: list[tuple[str, re.Pattern[tp.Any], Handler]] = []
 
-    def register(self, method: str, path: str, handler: Callable):
+    def register(self, method: str, path: str, handler: Handler) -> Handler:
         """Implement inherited method."""
         pattern = re.compile(path)
         self.routes.append((method.upper(), pattern, handler))
         return handler
 
-    def call_route(self, method, path):
+    def call_route(self, method: str, path: str) -> HandlerReturns:
         """Implement inherited method."""
         handler = self.route_notfound_404
         for method_, pattern, fn in self.routes:
