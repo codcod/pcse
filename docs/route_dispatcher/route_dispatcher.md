@@ -1,10 +1,12 @@
 # Route dispatchers and WSGI apps
 
 Source code: [dispatcher.py](../../pcse/route_dispatcher/dispatcher.py)
+
 Source code: [wsgiapp.py](../../pcse/route_dispatcher/wsgiapp.py)
 
-Basic "path dispatcher" or "router" that allows to register a route and
-subsequently search for such a route can be implemented with a list:
+Basic "route dispatcher", or "path dispatcher" or just "router" that allows to
+register a route and subsequently search for such a route can be implemented
+with a dict:
 
 ```python
 class Router:
@@ -34,7 +36,7 @@ assert '404 Not Found' == r.call_route('POST', '/hello')
 assert '404 Not Found' == r.call_route('GET', '/hello_world')
 ```
 
-Such a router can be quite easily extended and turned into a full-fledged ;-)
+Next such a router can be quite easily extended and turned into a full-fledged ;-)
 WSGI application.
 
 ```python
