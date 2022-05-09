@@ -15,3 +15,4 @@ In no particular order.
 
 1. [Asyncio Priority Queue](docs/asyncio/priority_queue.md).
 1. [Basic state machine](docs/state_machine/state_machine.md).
+1. [Route dispatchers and WSGI applications](docs/route_dispatcher/route_dispatcher.md).
